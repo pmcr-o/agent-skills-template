@@ -1,0 +1,49 @@
+name: PMCR-O .NET validation
+description: Build and test a .NET project as evidence; this action grants no PMCR-O authority.
+
+inputs:
+  dotnet-version:
+    description: .NET SDK version/range to install, for example 10.0.x.
+    required: true
+  project:
+    description: Path to the project or solution to validate.
+    required: true
+  configuration:
+    description: Build configuration.
+    required: false
+    default: Release
+  run-tests:
+    description: Whether to execute dotnet test after build.
+    required: false
+    default: 'true'
+
+outputs:
+  evidence-status:
+    description: Evidence status emitted by this wrapper. Authority is decided elsewhere.
+    value: ${{ steps.result.outputs.evidence-status }}
+
+runs:
+  using: composite
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+
+    - name: Restore
+      shell: pwsh
+      run: dotnet restore '${{ inputs.project }}'
+
+    - name: Build
+      shell: pwsh
+      run: dotnet build '${{ inputs.project }}' --configuration '${{ inputs.configuration }}' --no-restore
+
+    - name: Test
+      if: ${{ inputs.run-tests == 'true' }}
+      shell: pwsh
+      run: dotnet test '${{ inputs.project }}' --configuration '${{ inputs.configuration }}' --no-build
+
+    - name: Emit evidence status
+      id: result
+      shell: pwsh
+      run: Add-Content -Path $env:GITHUB_OUTPUT -Value 'evidence-status=CONFIRMED'
