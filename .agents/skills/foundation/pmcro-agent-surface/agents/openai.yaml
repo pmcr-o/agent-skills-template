@@ -1,0 +1,7 @@
+display_name: pmcro-agent-surface
+short_description: Expose a project component, workflow, MCP endpoint, or skill as a typed PMCR-O surface.
+default_prompt: |
+  Use the PMCR-O contract and return a bounded artifact.
+sample_prompts_ref: "references/sample-prompts.md"
+independent_surface: true
+independent_checker: false

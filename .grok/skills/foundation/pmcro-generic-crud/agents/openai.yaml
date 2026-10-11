@@ -1,0 +1,7 @@
+display_name: pmcro-generic-crud
+short_description: Apply a bounded CRUD lifecycle to skills, plugins, agent surfaces, catalogs, memory, trails, and domain resources.
+default_prompt: |
+  Use the PMCR-O contract and return a bounded artifact.
+sample_prompts_ref: "references/sample-prompts.md"
+independent_surface: true
+independent_checker: false

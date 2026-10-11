@@ -1,0 +1,38 @@
+{
+  "apiVersion": "pmcro.dev/v1",
+  "kind": "agent.catalog",
+  "id": "agent-skills-template",
+  "authority": "read-only discovery; execution requires route + grant + runtime",
+  "skills": [
+    {
+      "id": "desktop-commander",
+      "plugin": "foundation",
+      "description": "Use the Remote Desktop Commander connector as a bounded filesystem and PowerShell runtime adapter for PMCR-O workflows. Read-only discovery is the default; writes and processes require scoped grants."
+    },
+    {
+      "id": "dotagents-skill-creator",
+      "plugin": "foundation",
+      "description": "Bootstrap a provider-neutral .agents/skills workspace and plugin projection with dry-run first."
+    },
+    {
+      "id": "pmcro-agent-surface",
+      "plugin": "foundation",
+      "description": "Expose a project component, workflow, MCP endpoint, or skill as a typed PMCR-O surface."
+    },
+    {
+      "id": "pmcro-generic-crud",
+      "plugin": "foundation",
+      "description": "Apply a bounded CRUD lifecycle to skills, plugins, agent surfaces, catalogs, memory, trails, and domain resources."
+    },
+    {
+      "id": "pmcro-skill-lifecycle",
+      "plugin": "foundation",
+      "description": "Gate every PMCR-O skill lifecycle through a typed skill.create.request, generic required-folder template, message contract, sample prompts, independent checking, and post-check marketplace projection."
+    },
+    {
+      "id": "reflect",
+      "plugin": "foundation",
+      "description": "Record an earned constraint and one unexecuted next seed after an independent PMCR-O checker frame."
+    }
+  ]
+}

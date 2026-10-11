@@ -1,0 +1,1 @@
+{"id":"dotagents-skill-creator","version":"0.1.0","role":"skill-creator","entrypoint":"@dotagents-skill-creator","independentSurface":true,"independentChecker":false,"samplePromptsRef":"references/sample-prompts.md","modes":["inspect","simulate","replay","execute","check"],"scope":"project"}

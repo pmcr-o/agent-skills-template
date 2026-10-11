@@ -1,0 +1,16 @@
+{
+  "schema": "dotagents.manifest/v1",
+  "name": "agent-skills-template",
+  "owner": "pmcr-o",
+  "description": "Reusable full-repository template for self-contained agent marketplace projects.",
+  "invocationField": "plugin",
+  "plugins": [
+    {
+      "name": "foundation",
+      "source": "./.pmcro/plugins/foundation",
+      "description": "foundation capabilities owned by agent-skills-template"
+    }
+  ],
+  "canonical": ".pmcro",
+  "projection": ".agents"
+}

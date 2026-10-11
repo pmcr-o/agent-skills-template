@@ -1,0 +1,49 @@
+{
+  "apiVersion": "pmcro.dev/v1",
+  "kind": "agent.index",
+  "agent": "agent-skills-template",
+  "entries": [
+    {
+      "route": "@agent-skills-template /foundation:desktop-commander",
+      "plugin": "foundation",
+      "skill": "desktop-commander",
+      "description": "Use the Remote Desktop Commander connector as a bounded filesystem and PowerShell runtime adapter for PMCR-O workflows. Read-only discovery is the default; writes and processes require scoped grants.",
+      "path": ".pmcro/plugins/foundation/skills/desktop-commander"
+    },
+    {
+      "route": "@agent-skills-template /foundation:dotagents-skill-creator",
+      "plugin": "foundation",
+      "skill": "dotagents-skill-creator",
+      "description": "Bootstrap a provider-neutral .agents/skills workspace and plugin projection with dry-run first.",
+      "path": ".pmcro/plugins/foundation/skills/dotagents-skill-creator"
+    },
+    {
+      "route": "@agent-skills-template /foundation:pmcro-agent-surface",
+      "plugin": "foundation",
+      "skill": "pmcro-agent-surface",
+      "description": "Expose a project component, workflow, MCP endpoint, or skill as a typed PMCR-O surface.",
+      "path": ".pmcro/plugins/foundation/skills/pmcro-agent-surface"
+    },
+    {
+      "route": "@agent-skills-template /foundation:pmcro-generic-crud",
+      "plugin": "foundation",
+      "skill": "pmcro-generic-crud",
+      "description": "Apply a bounded CRUD lifecycle to skills, plugins, agent surfaces, catalogs, memory, trails, and domain resources.",
+      "path": ".pmcro/plugins/foundation/skills/pmcro-generic-crud"
+    },
+    {
+      "route": "@agent-skills-template /foundation:pmcro-skill-lifecycle",
+      "plugin": "foundation",
+      "skill": "pmcro-skill-lifecycle",
+      "description": "Gate every PMCR-O skill lifecycle through a typed skill.create.request, generic required-folder template, message contract, sample prompts, independent checking, and post-check marketplace projection.",
+      "path": ".pmcro/plugins/foundation/skills/pmcro-skill-lifecycle"
+    },
+    {
+      "route": "@agent-skills-template /foundation:reflect",
+      "plugin": "foundation",
+      "skill": "reflect",
+      "description": "Record an earned constraint and one unexecuted next seed after an independent PMCR-O checker frame.",
+      "path": ".pmcro/plugins/foundation/skills/reflect"
+    }
+  ]
+}

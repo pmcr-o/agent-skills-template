@@ -1,0 +1,32 @@
+{
+  "schema": "pmcro.agent-project/v1",
+  "id": "agent-skills-template",
+  "description": "Reusable full-repository template for self-contained agent marketplace projects.",
+  "derivedFrom": "A:\\agent-skills",
+  "template": "agent-skills-template",
+  "canonical": ".pmcro",
+  "projection": ".agents",
+  "hostChain": ".claude/.grok/.cursor/.github -> .agents -> .pmcro",
+  "requiredSkillShape": [
+    "SKILL.md",
+    "agents/",
+    "scripts/",
+    "references/",
+    "assets/",
+    "tests/"
+  ],
+  "autonomousLoop": {
+    "enabled": true,
+    "questionGate": false,
+    "onQuestion": "resolve-from-context-or-halt",
+    "phaseOrder": [
+      "orchestrate",
+      "plan",
+      "make",
+      "check",
+      "reflect"
+    ]
+  },
+  "orchestratorRole": "template-orchestrator",
+  "agentIsOrchestrator": true
+}

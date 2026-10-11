@@ -1,0 +1,41 @@
+{
+  "schema": "pmcro.capabilities/v1",
+  "agent": "agent-skills-template",
+  "executionRule": "registered AND runtime-present AND authorized",
+  "manualParity": {
+    "required": true,
+    "rule": "agent and manual terminal use the same scripts with the same arguments, exit codes, and evidence"
+  },
+  "capabilities": [
+    {
+      "plugin": "foundation",
+      "skill": "desktop-commander",
+      "route": "@agent-skills-template /foundation:desktop-commander"
+    },
+    {
+      "plugin": "foundation",
+      "skill": "dotagents-skill-creator",
+      "route": "@agent-skills-template /foundation:dotagents-skill-creator"
+    },
+    {
+      "plugin": "foundation",
+      "skill": "pmcro-agent-surface",
+      "route": "@agent-skills-template /foundation:pmcro-agent-surface"
+    },
+    {
+      "plugin": "foundation",
+      "skill": "pmcro-generic-crud",
+      "route": "@agent-skills-template /foundation:pmcro-generic-crud"
+    },
+    {
+      "plugin": "foundation",
+      "skill": "pmcro-skill-lifecycle",
+      "route": "@agent-skills-template /foundation:pmcro-skill-lifecycle"
+    },
+    {
+      "plugin": "foundation",
+      "skill": "reflect",
+      "route": "@agent-skills-template /foundation:reflect"
+    }
+  ]
+}
