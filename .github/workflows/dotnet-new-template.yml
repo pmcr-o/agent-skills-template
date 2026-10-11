@@ -1,0 +1,114 @@
+name: dotnet-new-template
+
+# Manual "Run workflow" button: install a .NET template package (optional),
+# instantiate a project with `dotnet new`, then build and test it as evidence.
+# This workflow produces evidence only; it does not grant PMCR-O authority
+# or approve deployment.
+
+on:
+  workflow_dispatch:
+    inputs:
+      template-package:
+        description: Optional template package to install first (NuGet id, id::version, or a path in this repo). Leave empty to use built-in templates.
+        required: false
+        default: ''
+        type: string
+      template:
+        description: Template short name for `dotnet new`, for example console, classlib, webapi, xunit.
+        required: true
+        default: console
+        type: string
+      project-name:
+        description: Name of the new project (letters, digits, dot, dash, underscore).
+        required: true
+        default: SampleApp
+        type: string
+      framework:
+        description: Target framework.
+        required: true
+        default: net10.0
+        type: choice
+        options:
+          - net8.0
+          - net9.0
+          - net10.0
+      dotnet-version:
+        description: .NET SDK version/range to install, for example 10.0.x.
+        required: true
+        default: 10.0.x
+        type: string
+      run-tests:
+        description: Run dotnet test after build.
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  scaffold:
+    name: dotnet new + build evidence
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      # Inputs reach the shell only through env vars, never by interpolation,
+      # and are validated before use.
+      - name: Validate inputs
+        shell: bash
+        env:
+          TEMPLATE: ${{ inputs.template }}
+          PROJECT_NAME: ${{ inputs.project-name }}
+          TEMPLATE_PACKAGE: ${{ inputs.template-package }}
+        run: |
+          set -euo pipefail
+          [[ "$TEMPLATE" =~ ^[A-Za-z0-9._-]+$ ]] || { echo "::error::invalid template short name"; exit 1; }
+          [[ "$PROJECT_NAME" =~ ^[A-Za-z][A-Za-z0-9._-]*$ ]] || { echo "::error::invalid project name"; exit 1; }
+          if [[ -n "$TEMPLATE_PACKAGE" ]]; then
+            [[ "$TEMPLATE_PACKAGE" =~ ^[A-Za-z0-9._:/-]+$ ]] || { echo "::error::invalid template package"; exit 1; }
+          fi
+
+      - name: dotnet new install
+        if: ${{ inputs.template-package != '' }}
+        shell: bash
+        env:
+          TEMPLATE_PACKAGE: ${{ inputs.template-package }}
+        run: dotnet new install "$TEMPLATE_PACKAGE"
+
+      - name: dotnet new
+        shell: bash
+        env:
+          TEMPLATE: ${{ inputs.template }}
+          PROJECT_NAME: ${{ inputs.project-name }}
+          FRAMEWORK: ${{ inputs.framework }}
+        run: |
+          set -euo pipefail
+          dotnet new "$TEMPLATE" --name "$PROJECT_NAME" --output "out/$PROJECT_NAME" --framework "$FRAMEWORK"
+          ls -R "out/$PROJECT_NAME" | head -50
+
+      - name: Build and test as evidence
+        id: dotnet
+        uses: ./.github/actions/pmcro-dotnet
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+          project: out/${{ inputs.project-name }}
+          run-tests: ${{ inputs.run-tests }}
+
+      - name: Upload generated project
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.project-name }}
+          path: out/${{ inputs.project-name }}
+
+      - name: Record evidence boundary
+        shell: bash
+        env:
+          EVIDENCE: ${{ steps.dotnet.outputs.evidence-status }}
+        run: |
+          echo "PMCR-O evidence status: $EVIDENCE"
+          echo "Evidence only: no authority granted, no deployment approved."
