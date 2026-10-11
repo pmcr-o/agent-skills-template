@@ -1,0 +1,55 @@
+name: validate-recursive-host-activation
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate PMCR-O activation contracts
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          activation = json.loads((root/'.pmcro/protocol/host-activation.json').read_text(encoding='utf-8-sig'))
+          icontext = json.loads((root/'.pmcro/protocol/i-context.schema.json').read_text(encoding='utf-8-sig'))
+          agents = (root/'AGENTS.md').read_text(encoding='utf-8-sig')
+
+          assert activation['canonicalAuthority'] == '.pmcro'
+          assert activation['projectionLaw'] == 'host -> .agents -> .pmcro'
+          assert activation['rootSeedPhase'] == 'ORCHESTRATE'
+          assert activation['lifecycle'] == ['ORCHESTRATE','PLAN','MAKE','CHECK','REFLECT']
+          assert activation['iContextSchema'] == 'pmcro.i-context/v1'
+          assert activation['sourceIntentImmutable'] is True
+          assert activation['authorityCeiling']['rule'] == 'inherit-or-narrow-never-widen'
+          assert activation['authorityCeiling']['hostGrantsAuthority'] is False
+          assert activation['authorityCeiling']['modelGrantsAuthority'] is False
+          assert activation['activation']['projectionAloneIsActivation'] is False
+          assert activation['activation']['hostSpecificBootstrapRequired'] is True
+          assert activation['activation']['bootstrapMayWidenAuthority'] is False
+          assert activation['activation']['bootstrapMustRunContinuously'] is True
+          assert activation['continuousRun']['enabled'] is True
+          assert activation['continuousRun']['automaticPhaseTransitions'] is True
+          assert activation['continuousRun']['humanInvocationBetweenPhasesRequired'] is False
+          assert icontext['properties']['schema']['const'] == 'pmcro.i-context/v1'
+          assert icontext['properties']['consciousnessClaim']['const'] is False
+          assert 'addressedIRef' in icontext['required']
+          for host in activation['requiredProjectedHosts']:
+              assert (root/host).is_dir(), host
+              assert (root/host/'ACTIVATE.md').is_file(), host
+          assert 'Projection is not activation.' in agents
+          assert 'ORCHESTRATE -> PLAN -> MAKE -> CHECK -> REFLECT' in agents
+          assert 'never widen' in agents
+          assert 'Do not pause between lifecycle phases for human permission.' in agents
+          print('RECURSIVE-HOST-ACTIVATION-PASS')
