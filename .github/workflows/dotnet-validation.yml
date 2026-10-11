@@ -1,0 +1,45 @@
+name: dotnet-validation
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: .NET SDK version/range, for example 10.0.x.
+        required: true
+        type: string
+      project:
+        description: Project or solution path.
+        required: true
+        type: string
+      configuration:
+        description: Build configuration.
+        required: false
+        default: Release
+        type: string
+      run-tests:
+        description: Execute dotnet test after build.
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  validate-dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and test as evidence
+        id: dotnet
+        uses: ./.github/actions/pmcro-dotnet
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+          project: ${{ inputs.project }}
+          configuration: ${{ inputs.configuration }}
+          run-tests: ${{ inputs.run-tests }}
+      - name: Record evidence boundary
+        shell: pwsh
+        run: |
+          "PMCR-O evidence status: ${{ steps.dotnet.outputs.evidence-status }}"
+          "This workflow produces evidence only; it does not grant authority or approve deployment."
