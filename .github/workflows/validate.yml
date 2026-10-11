@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate PMCR-O repository template
+      - name: Validate repository contract (PowerShell)
         shell: pwsh
         run: ./eng/validate-repository.ps1
+      - name: Independently validate repository contract (Python)
+        run: python eng/validate.py
