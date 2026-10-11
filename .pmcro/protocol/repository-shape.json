@@ -1,0 +1,57 @@
+{
+  "schema": "pmcro.repository-shape/v1",
+  "inspiredBy": {
+    "repository": "https://github.com/dotnet/skills.git",
+    "revision": "1d40f95ed0f2cdedfa4c9b2614b7c2035a4323cb"
+  },
+  "requiredTopLevel": [
+    ".agents",
+    ".claude-plugin",
+    ".config",
+    ".cursor-plugin",
+    ".github",
+    ".vscode",
+    "agentic-workflows",
+    "docs",
+    "eng",
+    "plugins",
+    "tests",
+    "AGENTS.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "README.md",
+    "SECURITY.md",
+    "LICENSE",
+    ".gitattributes",
+    ".gitignore",
+    ".markdownlint-cli2.jsonc"
+  ],
+  "pmcroAdditions": [".pmcro", ".grok"],
+  "githubSurfaces": [
+    "agents",
+    "aw",
+    "graders",
+    "instructions",
+    "plugin",
+    "prompts",
+    "scripts",
+    "skills",
+    "workflows",
+    "CODEOWNERS",
+    "actionlint.yaml",
+    "dependabot.yml",
+    "pull_request_template.md"
+  ],
+  "skillShape": ["SKILL.md", "agents", "scripts", "references", "assets", "tests"],
+  "genericizedDotnetSpecific": [
+    "global.json",
+    "*.experiment.yaml",
+    "dotnet-specific plugin domains",
+    "dotnet-specific test domains"
+  ],
+  "authority": {
+    "canonical": ".pmcro",
+    "projection": ".agents",
+    "hostChain": "host -> .agents -> .pmcro"
+  }
+}
