@@ -1,0 +1,8 @@
+{
+  "name": "foundation",
+  "version": "1.0.0",
+  "description": "Reusable agent-skill template and lifecycle foundation.",
+  "skills": [
+    "./skills/"
+  ]
+}
